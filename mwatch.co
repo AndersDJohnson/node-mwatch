@@ -1,0 +1,51 @@
+/*
+ * mwatch
+ * 
+ * A version of Node.js fs.watch that works over mounted file systems.
+ * Supports a subset of fs.watch funcationality for Node 6.x (http://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener)
+ *
+ * Tested with `sshfs -o cache=no` for ext3 drives on Linux 2.6.32-5-amd64 Debian 6.0.4 
+ * 
+ * By Anders D. Johnson
+ * http://github.com/adjohnson
+ * (c) 2012, MIT/X11 License
+ */
+
+fs = require 'fs'
+events = require 'events'
+
+module.exports = (poll = 1000) ->
+	
+	mtimes = {}
+	timers = {}
+
+	o = !(filename, listener) ->
+		@filename = filename
+		@listener = listener
+		@on 'change', ~>
+			@listener 'change', @filename
+
+	o.prototype = new events.EventEmitter!
+
+	o.prototype.close = ->
+		clearInterval timers[filename]
+
+	_stat = ->
+		fs.stat @filename, (err, stats) ~>
+			throw err if err
+			unless mtimes[@filename]?
+				mtimes[@filename] = stats.mtime
+			if mtimes[@filename].toString! is not stats.mtime.toString!
+				mtimes[@filename] = stats.mtime
+				@emit 'change', 'change', @filename
+
+	_poller = (object) ->
+		_stat.apply object
+	
+	mwatch = (filename, listener) ->
+		i = new o filename, listener
+		timers[filename] = setInterval _poller, poll, i
+		return i
+		
+	return mwatch
+
