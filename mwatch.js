@@ -7,7 +7,7 @@
  * Tested with `sshfs -o cache=no` for ext3 drives on Linux 2.6.32-5-amd64 Debian 6.0.4 
  * 
  * By Anders D. Johnson
- * http://github.com/adjohnson
+ * http://github.com/AndersDJohnson
  * (c) 2012, MIT/X11 License
  */
 (function(){
