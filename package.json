@@ -1,8 +1,9 @@
 {
-    "name": "mwatch",
-    "author": "Anders D. Johnson <AndersDJohnson@gmail.com>",
-    "description": "A version of Node.js fs.watch that works over mounted file systems.",
-    "keywords": [],
-    "version": "0.1.0",
-    "main": "./mwatch"
+  "name": "mwatch",
+  "author": "Anders D. Johnson <AndersDJohnson@gmail.com>",
+  "description": "A version of Node.js fs.watch that works over mounted file systems.",
+  "keywords": [],
+  "version": "0.1.0",
+  "main": "./mwatch",
+  "license": "MIT"
 }
